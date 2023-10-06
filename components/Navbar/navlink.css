@@ -1,0 +1,4 @@
+ .layer-two:hover > ul {
+    opacity: 95;
+    transition: 0.2s ease-in;
+} 
