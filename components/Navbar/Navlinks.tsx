@@ -1,6 +1,5 @@
 "use client"
 
-import React, { useRef } from 'react'
 import { useState ,useEffect} from 'react'
 import { navbarLinks } from './LinksDB'
 import Link from 'next/link'
@@ -14,6 +13,7 @@ const Navlinks = () => {
     const [isSubSubmenuOpen, setIsSubSubmenuOpen] = useState(false);
 
     const toggleSubmenu = (index) => {
+       
         const newOpenState = [...isOpenArray];
         newOpenState[index] = !newOpenState[index];
         setIsOpenArray(newOpenState);
@@ -27,9 +27,16 @@ const Navlinks = () => {
 return (
     <>
     {navbarLinks.map((link, index) => (
-        <li  key={index} className='group py-5' >
-            <Link href={link.link} onClick={()=> toggleSubmenu(index)}>
+        <li  key={index} className='group py-3' >
+            <Link href={link.link} className='flex justify-between' onClick={()=> toggleSubmenu(index)}>
                 <span> {link.name} </span>
+                  { link.sublinks ? <span className='block lg:hidden'> 
+                  
+                  {isOpenArray[index] ? <IoIosArrowUp/> : <IoIosArrowDown/>}
+                  
+                   </span> : <span></span>
+                   }
+
             </Link>
 
                     {/* level 2 dropdown */}
@@ -57,20 +64,22 @@ return (
                      ))}
                 </ul>
                 {/* mobile and tablet view */}
-                   { <ul className ={`${ isOpenArray[index] ? 'block lg:hidden' : 'hidden'}`}>
-                    { link.sublinks && link.sublinks?.map((item, index) => (
-                        <li key={index} className=''>
-                            <Link href={item.link} className='' onClick={
+                   { <ul className ={` transition-max-h ease-in-out duration-500 ${ isOpenArray[index] ? 'max-h-screen opacity-100 lg:hidden' : 'max-h-0 opacity-0'}  bg-black `}>
+                    { link.sublinks && isOpenArray[index]  && link.sublinks?.map((item, index) => (
+                       <li key={index} className='py-2 px-2 text-xs'>
+                               <Link href={item.link} className='py-1 px-1 flex justify-between ' onClick={
                                     () => toggleSubSubmenu() }>
                                 <span>{item.name} </span>
-                                <span className=' text-xl'>{item.arrow ? item.arrow : '' } </span>
-                            </Link>
+                                {item.sublinks ? <span>
+                                   { isSubSubmenuOpen ? <IoIosArrowDown/> : <IoIosArrowUp/>}
+                                    </span>  : <span></span>}
+                            </Link> 
 
                             {/* level 3 dropdown */}
                             
-                            <ul className={`${ isSubSubmenuOpen ? 'block lg:hidden' : 'hidden'}`}>
+                            <ul className={` transition-max-h ease-in-out duration-700 ${ isSubSubmenuOpen ? ' max-h-screen opacity-100 lg:hidden' : ' max-h-0 opacity-0 '} `}>
                                 {item.sublinks?.map((t, index) => (
-                                    <li key={index} className='  '>
+                                    <li key={index} className=' py-2 px-2  '>
                                         <Link href={t.link}>
                                             <span className=''>{t.name}</span>
                                         </Link>
@@ -78,12 +87,15 @@ return (
                                 ))}
                              </ul>     
                         </li>
+
+                    
                      ))}
                 </ul>
                 }
                     
         </li>
             ))}
+         
        </>
     )
 }

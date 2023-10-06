@@ -20,7 +20,7 @@ export const navbarLinks = [
     { name: 'SERVICES', link: '/' },
 
     {
-        name: 'RESOURSES', link: '/', sublinks: [
+        name: 'RESOURSES', submenu: true, link: '/', sublinks: [
             { name: 'Documentation', link: '/' },
             { name: 'Learn', link: '/' },
         ]
